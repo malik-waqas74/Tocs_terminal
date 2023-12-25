@@ -5,7 +5,7 @@ pipeline {
       stage('Build') {
         steps {
           script {
-            dockerImage = docker.build("taimoorrkhan/distance-converter:${env.BUILD_ID}")
+            dockerImage = docker.build("malikwaqas74/cv:${env.BUILD_ID}")
         }
     }
 }
@@ -35,10 +35,10 @@ pipeline {
                                 configName: "MyUbuntuServer", 
                                 transfers: [sshTransfer(
                                     execCommand: """
-                                        docker pull taimoorrkhan/distance-converter:${env.BUILD_ID}
+                                        docker pull malikwaqas74/cv:${env.BUILD_ID}
                                         docker stop distance-converter-container || true
                                         docker rm distance-converter-container || true
-                                        docker run -d --name distance-converter-container -p 400:80 taimoorrkhan/distance-converter:${env.BUILD_ID}
+                                        docker run -d --name distance-converter-container -p 400:80 malikwaqas74/cv:${env.BUILD_ID}
                                     """
                                 )]
                             )
@@ -57,10 +57,10 @@ pipeline {
                                     configName: "MyUbuntuServer",
                                     transfers: [sshTransfer(
                                         execCommand: """
-                                            docker pull taimoorrkhan/distance-converter:${previousSuccessfulTag}
+                                            docker pull malikwaqas74/cv:${previousSuccessfulTag}
                                             docker stop distance-converter-container || true
                                             docker rm distance-converter-container || true
-                                            docker run -d --name distance-converter-container -p 400:80 taimoorrkhan/distance-converter:${previousSuccessfulTag}
+                                            docker run -d --name distance-converter-container -p 400:80 malikwaqas74/cv:${previousSuccessfulTag}
                                         """
                                     )]
                                 )
@@ -78,7 +78,7 @@ pipeline {
     post {
         failure {
             mail(
-                to: 'taimoorkhan.tmr123@gmail.com',
+                to: 'malikwaqas7447@gmail.com',
                 subject: "Failed Pipeline: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
                 body: "Something is wrong with the build ${env.BUILD_URL}"
             )

@@ -36,9 +36,9 @@ pipeline {
                                 transfers: [sshTransfer(
                                     execCommand: """
                                         docker pull malikwaqas74/cv:${env.BUILD_ID}
-                                        docker stop distance-converter-container || true
-                                        docker rm distance-converter-container || true
-                                        docker run -d --name distance-converter-container -p 400:80 malikwaqas74/cv:${env.BUILD_ID}
+                                        docker stop cv-container || true
+                                        docker rm cv-container || true
+                                        docker run -d --name cv-container -p 4000:80 malikwaqas74/cv:${env.BUILD_ID}
                                     """
                                 )]
                             )
@@ -46,7 +46,7 @@ pipeline {
                     )
 
                     // Check if deployment is successful
-                    boolean isDeploymentSuccessful = sh(script: 'curl -s -o /dev/null -w "%{http_code}" http://51.20.126.236:400', returnStdout: true).trim() == '200'
+                    boolean isDeploymentSuccessful = sh(script: 'curl -s -o /dev/null -w "%{http_code}" http://51.20.126.236:4000', returnStdout: true).trim() == '200'
 
                     if (!isDeploymentSuccessful) {
                         // Rollback to the previous version
@@ -58,9 +58,9 @@ pipeline {
                                     transfers: [sshTransfer(
                                         execCommand: """
                                             docker pull malikwaqas74/cv:${previousSuccessfulTag}
-                                            docker stop distance-converter-container || true
-                                            docker rm distance-converter-container || true
-                                            docker run -d --name distance-converter-container -p 400:80 malikwaqas74/cv:${previousSuccessfulTag}
+                                            docker stop cv-container || true
+                                            docker rm cvistance-converter-container || true
+                                            docker run -d --name cv-container -p 4000:80 malikwaqas74/cv:${previousSuccessfulTag}
                                         """
                                     )]
                                 )

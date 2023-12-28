@@ -59,7 +59,7 @@ pipeline {
                                         execCommand: """
                                             docker pull malikwaqas74/cv:${previousSuccessfulTag}
                                             docker stop cv-container || true
-                                            docker rm cvistance-converter-container || true
+                                            docker rm cv-container || true
                                             docker run -d --name cv-container -p 4000:80 malikwaqas74/cv:${previousSuccessfulTag}
                                         """
                                     )]
